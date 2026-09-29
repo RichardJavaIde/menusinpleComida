@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER") // "ADMIN" | "USER"
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  icon        String?  // nombre de icono lucide, ej: "utensils"
+  sortOrder   Int      @default(0)
+  isVisible   Boolean  @default(true)
+  dishes      Dish[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model Dish {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String?
+  priceCents   Int      // 1250 = 12.50
+  categoryId   Int
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  isVisible    Boolean  @default(true)   // visible u oculto en el menú
+  isAvailable  Boolean  @default(true)   // false = se muestra como "Agotado"
+  showSchedule Boolean  @default(false)  // mostrar horario informativo
+  scheduleFrom String?                   // "11:00"
+  scheduleTo   String?                   // "15:00"
+  sortOrder    Int      @default(0)
+  tags         Tag[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([categoryId, sortOrder])
+  @@index([isVisible])
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  color     String?  // hex opcional
+  icon      String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  dishes    Dish[]
+}
+
+model Settings {
+  id              Int     @id @default(1)
+  restaurantName  String  @default("Mi Restaurante")
+  slogan          String?
+  phone           String?
+  address         String?
+  currencySymbol  String  @default("RD$")
+  showSchedules   Boolean @default(true)  // interruptor global de horarios
+
+  colorPrimary    String  @default("#B45309")
+  colorSecondary  String  @default("#1F2937")
+  colorBackground String  @default("#FFFBF5")
+  colorText       String  @default("#1F2937")
+  colorPrice      String  @default("#15803D")
+
+  updatedAt       DateTime @updatedAt
+}
