@@ -16,7 +16,7 @@ export default async function LoginPage() {
             <UtensilsCrossed className="size-6" />
           </div>
           <h1 className="text-xl font-semibold text-stone-900">Menú Digital</h1>
-          <p className="text-sm text-stone-500">Panel de administración</p>
+          <p className="text-sm text-stone-500">Panel de administración.</p>
         </div>
         <LoginForm />
       </div>
