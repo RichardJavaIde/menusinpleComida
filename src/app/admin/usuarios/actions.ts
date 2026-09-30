@@ -141,7 +141,8 @@ export async function resetUserPassword(
 
     await db.user.update({
       where: { id },
-      data: { passwordHash: await bcrypt.hash(pwd.data, 12) },
+      data: { passwordHash: await bcrypt.hash(pwd.data, 12),
+  sessionVersion: { increment: 1 }, },
     });
     refresh();
     return { success: true, message: `Contraseña de "${target.name}" restablecida.` };

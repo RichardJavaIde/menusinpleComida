@@ -6,16 +6,20 @@ import { db } from "@/lib/db";
 import { readSession } from "@/lib/session";
 
 export const getCurrentUser = cache(async () => {
-  const uid = await readSession();
-  if (!uid) return null;
+  const session = await readSession();
+  if (!session) return null;
 
   const user = await db.user.findUnique({
-    where: { id: uid },
-    select: { id: true, name: true, email: true, role: true, isActive: true },
+    where: { id: session.uid },
+    select: {
+      id: true, name: true, email: true, role: true, isActive: true, sessionVersion: true,
+    },
   });
 
-  if (!user || !user.isActive) return null;
-  return user;
+  if (!user || !user.isActive || user.sessionVersion !== session.ver) return null;
+
+  const { sessionVersion: _v, ...safe } = user;
+  return safe;
 });
 
 export async function requireUser() {

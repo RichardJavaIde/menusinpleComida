@@ -3,7 +3,10 @@ import { requireUser } from "@/lib/auth";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { ToastProvider } from "@/components/toast";
 
-export const metadata = { title: { default: "Panel", template: "%s · Menú Digital" } };
+export const metadata = {
+  title: { default: "Panel", template: "%s · Menú Digital" },
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();

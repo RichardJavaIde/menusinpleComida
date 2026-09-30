@@ -4,8 +4,7 @@ import { UtensilsCrossed } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { LoginForm } from "./login-form";
 
-export const metadata = { title: "Iniciar sesión" };
-
+export const metadata = { title: "Iniciar sesión", robots: { index: false, follow: false } };
 export default async function LoginPage() {
   if (await getCurrentUser()) redirect("/admin");
 

@@ -212,8 +212,8 @@ export function DishManager({
                           )}
                           <div className="mt-2 flex flex-wrap items-center gap-1.5">
                             {d.tags.map((t) => (
-  <TagChip key={t.id} name={t.name} color={t.color} icon={t.icon} />
-))}
+                                      <TagChip key={t.id} name={t.name} color={t.color} icon={t.icon} />
+                                 ) )}
                             {hasSchedule && (
                               <span className="flex items-center gap-1 text-xs text-stone-500">
                                 <Clock className="size-3.5" />

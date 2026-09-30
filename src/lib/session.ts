@@ -14,8 +14,8 @@ function getKey() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createSession(userId: number) {
-  const token = await new SignJWT({ uid: userId })
+export async function createSession(userId: number, version: number) {
+  const token = await new SignJWT({ uid: userId, ver: version })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
@@ -31,12 +31,15 @@ export async function createSession(userId: number) {
   });
 }
 
-export async function readSession(): Promise<number | null> {
+
+export async function readSession(): Promise<{ uid: number; ver: number } | null> {
   const token = (await cookies()).get(COOKIE_NAME)?.value;
   if (!token) return null;
   try {
     const { payload } = await jwtVerify(token, getKey(), { algorithms: ["HS256"] });
-    return typeof payload.uid === "number" ? payload.uid : null;
+    return typeof payload.uid === "number" && typeof payload.ver === "number"
+      ? { uid: payload.uid, ver: payload.ver }
+      : null;
   } catch {
     return null;
   }

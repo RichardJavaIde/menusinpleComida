@@ -41,7 +41,7 @@ export async function loginAction(_prev: LoginState, formData: FormData): Promis
   }
 
   clearFailures(email);
-  await createSession(user.id);
+  await createSession(user.id, user.sessionVersion);
   redirect("/admin");
 }
 
