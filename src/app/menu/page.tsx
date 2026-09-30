@@ -5,11 +5,18 @@ import { getMenuData } from "@/lib/menu-data";
 import { readableOn } from "@/lib/theme";
 import { MenuView } from "./menu-view";
 
+export const revalidate = 3600;
 export async function generateMetadata(): Promise<Metadata> {
   const m = await getMenuData();
   return {
+     title: `${m.restaurantName} · Menú`,
+  description: m.slogan ?? `Menú digital de ${m.restaurantName}`,
+  alternates: { canonical: "/menu" },
+  openGraph: {
     title: `${m.restaurantName} · Menú`,
     description: m.slogan ?? `Menú digital de ${m.restaurantName}`,
+    type: "website",
+  },
   };
 }
 
